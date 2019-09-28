@@ -55,11 +55,18 @@ public class FormUserMainActivity extends AppCompatActivity implements View.OnCl
         userModel= intent.getParcelableExtra("USER");
         buttonSave= findViewById(R.id.button_save);
         buttonSave.setOnClickListener(this);
+
+        // mengambil data yang di kirim dari main activity untuk mengecek apkah akan melakukan tambah data ubah data
         formType= getIntent().getIntExtra(EXTRA_TYPE_FORM, 0);
         String actionBarTitle= "";
         String buttonTitle="";
+
+        // membuat custom toolbar
         switch (formType){
+
+            // ketika yang dikirim 1 maka akan menmabah data
             case 1:
+                // melakukan tambah data
                 actionBarTitle= "Tambah Baru";
                 buttonTitle= "Simpan";
                 break;
@@ -72,6 +79,7 @@ public class FormUserMainActivity extends AppCompatActivity implements View.OnCl
             getSupportActionBar().setTitle(actionBarTitle);
             getSupportActionBar().setDisplayShowCustomEnabled(true);
         }
+        // membuat custom button
         buttonSave.setText(buttonTitle);
     }
 
@@ -107,16 +115,23 @@ public class FormUserMainActivity extends AppCompatActivity implements View.OnCl
                 inputPhone.setError(FIELD_DIGIT_ONLY);
                 return;
             }
+            // memanggil method saveUser untuk menyimpan data ke dalam sharefreference
             saveUser(nama, email, age, phoneNo, loves);
             Intent intent= new Intent();
+
+            // mengirim hasil ke dalam main activity
             intent.putExtra(EXTRA_RESULT, userModel );
             setResult(RESULT_CODE, intent);
             finish();
         }
     }
+
+    // mengecek kefalitan dari email pengguna
     private boolean isValidEmail(CharSequence email){
         return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
+
+    // menyimpan data pengguna ke dalam sharefreference
     void saveUser(String nama, String email, String age, String photoNo, boolean love){
         UserPreference userPreference= new UserPreference(this);
         userModel.setName(nama);
@@ -128,6 +143,8 @@ public class FormUserMainActivity extends AppCompatActivity implements View.OnCl
         userPreference.setUser(userModel);
         Toast.makeText(this, "data tersimpan", Toast.LENGTH_SHORT).show();
     }
+
+    // menampilkan devault dari status edit text ketika akan mengubah data
     private void showPreferenceInForm(){
         inputNama.setText(userModel.getName());
         inputEmail.setText(userModel.getEmail());
